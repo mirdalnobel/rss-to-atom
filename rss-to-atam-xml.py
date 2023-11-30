@@ -69,4 +69,4 @@ if st.button('Konversi ke Atom XML'):
 # Pindahkan file ke direktori yang bisa diakses untuk diunduh (jika ada hasil konversi)
 if result_file:
     target_path = '/app/converted_atom.xml'
-    shutil.move(result_file, target_path)
+    shutil.copy2(result_file, target_path)
