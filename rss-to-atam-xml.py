@@ -43,7 +43,7 @@ def convert_rss_to_atom(rss_url):
         content.text = BeautifulSoup(entry.summary, 'html.parser').get_text()
 
     # Membuat objek ElementTree dan menyimpannya ke file
-    output_filename = 'converted_atom.xml'
+    output_filename = '/tmp/converted_atom.xml'
     atom_tree = ET.ElementTree(atom_feed)
     atom_tree.write(output_filename, encoding='utf-8', xml_declaration=True)
 
@@ -60,9 +60,5 @@ if st.button('Konversi ke Atom XML'):
         result_file = convert_rss_to_atom(rss_url)
         st.success('Konversi selesai!')
         
-        # Pindahkan file ke direktori yang bisa diakses untuk diunduh
-        target_path = '/app/converted_atom.xml'
-        shutil.move(result_file, target_path)
-        
         # Tampilkan tautan unduhan
-        st.markdown(f'[Download File](sandbox:/converted_atom.xml)')
+        st.markdown(f'[Download File](sandbox:/tmp/converted_atom.xml)')
