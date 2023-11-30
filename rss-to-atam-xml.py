@@ -2,6 +2,7 @@ import streamlit as st
 import feedparser
 from bs4 import BeautifulSoup
 from xml.etree import ElementTree as ET
+import pyperclip
 
 def convert_rss_to_atom(rss_url):
     # Membaca RSS feed
@@ -59,3 +60,8 @@ if st.button('Konversi ke Atom XML'):
         
         # Tampilkan hasil konversi
         st.text_area('Hasil Konversi Atom XML', result_atom)
+
+        # Tambahkan tombol untuk menyalin hasil konversi
+        if st.button('Salin ke Clipboard'):
+            pyperclip.copy(result_atom)
+            st.success('Hasil konversi disalin ke clipboard!')
