@@ -52,6 +52,9 @@ def convert_rss_to_atom(rss_url):
 # Streamlit app
 st.title('RSS to Atom Converter')
 
+# Variabel untuk menyimpan hasil konversi
+result_file = None
+
 # Input URL RSS feed dari pengguna
 rss_url = st.text_input('Masukkan URL RSS feed:')
 if st.button('Konversi ke Atom XML'):
@@ -63,11 +66,7 @@ if st.button('Konversi ke Atom XML'):
         # Tampilkan tautan unduhan
         st.markdown(f'[Download File](sandbox:/tmp/converted_atom.xml)')
 
-        # Baca file dan tampilkan kontennya
-        with open(result_file, 'r', encoding='utf-8') as file:
-            file_contents = file.read()
-            st.text_area('Isi File Atom XML', file_contents)
-
-# Pindahkan file ke direktori yang bisa diakses untuk diunduh
-target_path = '/app/converted_atom.xml'
-shutil.move(result_file, target_path)
+# Pindahkan file ke direktori yang bisa diakses untuk diunduh (jika ada hasil konversi)
+if result_file:
+    target_path = '/app/converted_atom.xml'
+    shutil.move(result_file, target_path)
