@@ -2,16 +2,13 @@ import streamlit as st
 import feedparser
 from bs4 import BeautifulSoup
 from xml.etree import ElementTree as ET
-import pyperclip
 
+# Fungsi untuk konversi RSS ke Atom
 def convert_rss_to_atom(rss_url):
-    # Membaca RSS feed
     feed = feedparser.parse(rss_url)
 
-    # Membuat elemen root untuk Atom feed
     atom_feed = ET.Element('feed', xmlns='http://www.w3.org/2005/Atom')
 
-    # Menambahkan elemen-elemen umum Atom feed
     title = ET.SubElement(atom_feed, 'title')
     title.text = feed.feed.title
 
@@ -23,7 +20,6 @@ def convert_rss_to_atom(rss_url):
     updated = ET.SubElement(atom_feed, 'updated')
     updated.text = feed.feed.updated
 
-    # Mengonversi setiap entri RSS ke entri Atom
     for entry in feed.entries:
         atom_entry = ET.SubElement(atom_feed, 'entry')
 
@@ -41,7 +37,6 @@ def convert_rss_to_atom(rss_url):
         content = ET.SubElement(atom_entry, 'content', {'type': 'html'})
         content.text = BeautifulSoup(entry.summary, 'html.parser').get_text()
 
-    # Membuat objek ElementTree dan mengonversi ke string
     atom_tree = ET.ElementTree(atom_feed)
     atom_str = ET.tostring(atom_feed, encoding='utf-8').decode('utf-8')
 
@@ -63,5 +58,5 @@ if st.button('Konversi ke Atom XML'):
 
         # Tambahkan tombol untuk menyalin hasil konversi
         if st.button('Salin ke Clipboard'):
-            pyperclip.copy(result_atom)
+            st.experimental_set_clipboard(result_atom)
             st.success('Hasil konversi disalin ke clipboard!')
