@@ -62,3 +62,12 @@ if st.button('Konversi ke Atom XML'):
         
         # Tampilkan tautan unduhan
         st.markdown(f'[Download File](sandbox:/tmp/converted_atom.xml)')
+
+        # Baca file dan tampilkan kontennya
+        with open(result_file, 'r', encoding='utf-8') as file:
+            file_contents = file.read()
+            st.text_area('Isi File Atom XML', file_contents)
+
+# Pindahkan file ke direktori yang bisa diakses untuk diunduh
+target_path = '/app/converted_atom.xml'
+shutil.move(result_file, target_path)
