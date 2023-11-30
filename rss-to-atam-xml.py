@@ -3,6 +3,7 @@ import feedparser
 from bs4 import BeautifulSoup
 from xml.etree import ElementTree as ET
 import os
+import shutil
 
 def convert_rss_to_atom(rss_url):
     # Membaca RSS feed
@@ -59,8 +60,9 @@ if st.button('Konversi ke Atom XML'):
         result_file = convert_rss_to_atom(rss_url)
         st.success('Konversi selesai!')
         
+        # Pindahkan file ke direktori yang bisa diakses untuk diunduh
+        target_path = '/app/converted_atom.xml'
+        shutil.move(result_file, target_path)
+        
         # Tampilkan tautan unduhan
         st.markdown(f'[Download File](sandbox:/converted_atom.xml)')
-
-        # Pindahkan file ke direktori yang bisa diakses untuk diunduh
-        os.rename(result_file, f'/app/{result_file}')
