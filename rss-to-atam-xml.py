@@ -2,8 +2,6 @@ import streamlit as st
 import feedparser
 from bs4 import BeautifulSoup
 from xml.etree import ElementTree as ET
-import os
-import shutil
 
 def convert_rss_to_atom(rss_url):
     # Membaca RSS feed
@@ -42,31 +40,22 @@ def convert_rss_to_atom(rss_url):
         content = ET.SubElement(atom_entry, 'content', {'type': 'html'})
         content.text = BeautifulSoup(entry.summary, 'html.parser').get_text()
 
-    # Membuat objek ElementTree dan menyimpannya ke file
-    output_filename = '/tmp/converted_atom.xml'
+    # Membuat objek ElementTree dan mengonversi ke string
     atom_tree = ET.ElementTree(atom_feed)
-    atom_tree.write(output_filename, encoding='utf-8', xml_declaration=True)
+    atom_str = ET.tostring(atom_feed, encoding='utf-8').decode('utf-8')
 
-    return output_filename
+    return atom_str
 
 # Streamlit app
 st.title('RSS to Atom Converter')
-
-# Variabel untuk menyimpan hasil konversi
-result_file = None
 
 # Input URL RSS feed dari pengguna
 rss_url = st.text_input('Masukkan URL RSS feed:')
 if st.button('Konversi ke Atom XML'):
     if rss_url:
         st.info('Proses konversi sedang berlangsung...')
-        result_file = convert_rss_to_atom(rss_url)
+        result_atom = convert_rss_to_atom(rss_url)
         st.success('Konversi selesai!')
         
-        # Tampilkan tautan unduhan
-        st.markdown(f'[Download File](sandbox:/tmp/converted_atom.xml)')
-
-# Pindahkan file ke direktori yang bisa diakses untuk diunduh (jika ada hasil konversi)
-if result_file:
-    target_path = '/app/converted_atom.xml'
-    shutil.copy2(result_file, target_path)
+        # Tampilkan hasil konversi
+        st.text_area('Hasil Konversi Atom XML', result_atom)
